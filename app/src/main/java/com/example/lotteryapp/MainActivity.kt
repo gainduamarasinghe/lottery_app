@@ -41,6 +41,8 @@ fun DisplayNumbers(){
     var num5 by remember { mutableIntStateOf(0) }
     var num6 by remember { mutableIntStateOf(0) }
 
+    var sortButtonClicks by remember { mutableIntStateOf(0) }
+
     Column (
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -59,16 +61,31 @@ fun DisplayNumbers(){
             Text(num6.toString())
 
         }
-        Button(onClick = {
-            result = calculate()
-            num1 = result[0]
-            num2 = result[1]
-            num3 = result[2]
-            num4 = result[3]
-            num5 = result[4]
-            num6 = result[5]
-        }) {
-            Text("Generate")
+        Row{
+            Button(onClick = {
+                result = calculate()
+                num1 = result[0]
+                num2 = result[1]
+                num3 = result[2]
+                num4 = result[3]
+                num5 = result[4]
+                num6 = result[5]
+            }) {
+                Text("Generate")
+            }
+            Button(
+                onClick = {
+                    sortButtonClicks++
+                    result = sortResult(result, sortButtonClicks % 2 != 0)
+                    num1 = result[0]
+                    num2 = result[1]
+                    num3 = result[2]
+                    num4 = result[3]
+                    num5 = result[4]
+                    num6 = result[5]
+            }) {
+                Text("Sort")
+            }
         }
 
         Row {
@@ -134,4 +151,14 @@ fun generateNumber(index: Int, list: MutableList<Int>): MutableList<Int> {
     return list
 }
 
+fun sortResult(result: MutableList<Int>, ascending: Boolean): MutableList<Int>{
+    var newResult = result.toMutableList()
+    newResult.sort()
 
+    if (!ascending){
+        newResult.reverse()
+    }
+
+    return newResult
+
+}
